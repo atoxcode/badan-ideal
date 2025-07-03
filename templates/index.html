@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <title>Berat Badan Ideal</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+    <div class="header">
+        <div class="header-content">
+            <h1>Cek Berat Badan Ideal</h1>
+            <div class="user-info">
+                <span>Selamat datang, <strong>{{ username }}</strong></span>
+                <a href="{{ url_for('logout') }}" class="logout-btn">Logout</a>
+            </div>
+        </div>
+    </div>
+    
+    {% with messages = get_flashed_messages(with_categories=true) %}
+        {% if messages %}
+            {% for category, message in messages %}
+                <div class="alert alert-{{ category }}">
+                    {{ message }}
+                </div>
+            {% endfor %}
+        {% endif %}
+    {% endwith %}
+    
+    <div class="form-container">
+        <form method="POST">
+            <div class="form-group">
+                <label>Usia:</label>
+                <input type="number" name="usia" required>
+            </div>
+
+            <div class="form-group">
+                <label>Jenis Kelamin:</label>
+                <select name="jk" required>
+                    <option value="L">Laki-laki</option>
+                    <option value="P">Perempuan</option>
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label>Tinggi Badan (cm):</label>
+                <input type="number" name="tinggi" step="0.1" required>
+            </div>
+
+            <div class="form-group">
+                <label>Berat Badan (kg):</label>
+                <input type="number" name="berat" step="0.1" required>
+            </div>
+
+            <div class="form-group">
+                <input type="submit" value="Cek Berat Ideal">
+            </div>
+        </form>
+    </div>
+
+    {% if hasil %}
+    <div class="result">
+        <h2>Hasil Evaluasi</h2>
+        <p><strong>Usia:</strong> {{ hasil.usia }} tahun</p>
+        <p><strong>Jenis Kelamin:</strong> {{ hasil.jenis_kelamin }}</p>
+        <p><strong>Tinggi Badan:</strong> {{ hasil.tinggi }} cm</p>
+        <p><strong>Berat Badan:</strong> {{ hasil.berat }} kg</p>
+        <p><strong>Berat Ideal:</strong> {{ hasil.berat_ideal }} kg</p>
+        <p><strong>Saran:</strong> {{ hasil.saran }}</p>
+    </div>
+    {% endif %}
+</body>
+</html>
