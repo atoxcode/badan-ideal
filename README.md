@@ -1,5 +1,7 @@
 # Aplikasi Berat Badan Ideal
 
+Disclaimer: Code ini di generate oleh generative AI. 
+
 Aplikasi web sederhana untuk menghitung berat badan ideal berdasarkan usia, jenis kelamin, dan tinggi badan dengan sistem login personal.
 
 ## Fitur

@@ -37,6 +37,20 @@ def berikan_saran(berat_sekarang, berat_ideal):
     else:
         return "Anda kekurangan berat badan. Disarankan untuk menambah berat badan."
 
+def tentukan_kategori_bmi(berat, tinggi):
+    # Konversi tinggi dari cm ke meter
+    tinggi_m = tinggi / 100
+    bmi = berat / (tinggi_m ** 2)
+    
+    if bmi < 18.5:
+        return "Kurus", bmi, "rgba(255, 206, 86, 0.8)", "rgba(255, 206, 86, 1)"
+    elif 18.5 <= bmi < 25:
+        return "Normal", bmi, "rgba(75, 192, 192, 0.8)", "rgba(75, 192, 192, 1)"
+    elif 25 <= bmi < 30:
+        return "Gemuk", bmi, "rgba(255, 159, 64, 0.8)", "rgba(255, 159, 64, 1)"
+    else:
+        return "Obesitas", bmi, "rgba(255, 99, 132, 0.8)", "rgba(255, 99, 132, 1)"
+
 @app.route("/login", methods=["GET", "POST"])
 def login():
     if request.method == "POST":
@@ -61,7 +75,6 @@ def logout():
 @app.route("/", methods=["GET", "POST"])
 @login_required
 def index():
-    hasil = None
     if request.method == "POST":
         usia = int(request.form["usia"])
         jk = request.form["jk"]
@@ -70,6 +83,7 @@ def index():
 
         berat_ideal = hitung_berat_ideal(jk, tinggi)
         saran = berikan_saran(berat, berat_ideal)
+        kategori_bmi, nilai_bmi, bmi_color, bmi_border_color = tentukan_kategori_bmi(berat, tinggi)
 
         hasil = {
             "usia": usia,
@@ -77,10 +91,28 @@ def index():
             "tinggi": tinggi,
             "berat": berat,
             "berat_ideal": round(berat_ideal, 2),
-            "saran": saran
+            "saran": saran,
+            "kategori_bmi": kategori_bmi,
+            "nilai_bmi": round(nilai_bmi, 2),
+            "bmi_color": bmi_color,
+            "bmi_border_color": bmi_border_color
         }
+        
+        # Simpan hasil ke session untuk digunakan di halaman hasil
+        session['hasil'] = hasil
+        return redirect(url_for('hasil'))
 
-    return render_template("index.html", hasil=hasil, username=session.get('username'))
+    return render_template("index.html", username=session.get('username'))
+
+@app.route("/hasil")
+@login_required
+def hasil():
+    hasil = session.get('hasil')
+    if not hasil:
+        flash('Tidak ada data hasil. Silakan cek berat badan ideal terlebih dahulu.', 'error')
+        return redirect(url_for('index'))
+    
+    return render_template("hasil.html", hasil=hasil, username=session.get('username'))
 
 if __name__ == "__main__":
     app.run(debug=True)

@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <title>Hasil Cek Berat Ideal</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+    <div class="header">
+        <div class="header-content">
+            <h1>Hasil Evaluasi Berat Badan</h1>
+            <div class="user-info">
+                <span>Selamat datang, <strong>{{ username }}</strong></span>
+                <a href="{{ url_for('logout') }}" class="logout-btn">Logout</a>
+            </div>
+        </div>
+    </div>
+
+    <div class="result-container">
+        <!-- Informasi Personal -->
+        <div class="personal-info">
+            <h2>Informasi Personal</h2>
+            <div class="info-grid">
+                <div class="info-item">
+                    <span class="label">Usia:</span>
+                    <span class="value">{{ hasil.usia }} tahun</span>
+                </div>
+                <div class="info-item">
+                    <span class="label">Jenis Kelamin:</span>
+                    <span class="value">{{ hasil.jenis_kelamin }}</span>
+                </div>
+                <div class="info-item">
+                    <span class="label">Tinggi Badan:</span>
+                    <span class="value">{{ hasil.tinggi }} cm</span>
+                </div>
+                <div class="info-item">
+                    <span class="label">Berat Badan Saat Ini:</span>
+                    <span class="value">{{ hasil.berat }} kg</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Grafik Perbandingan Berat -->
+        <div class="chart-container">
+            <h2>Perbandingan Berat Badan</h2>
+            <div class="chart-wrapper">
+                <canvas id="weightChart"></canvas>
+            </div>
+        </div>
+
+        <!-- Grafik BMI -->
+        <div class="chart-container">
+            <h2>Indeks Massa Tubuh (BMI)</h2>
+            <div class="chart-wrapper">
+                <canvas id="bmiChart"></canvas>
+            </div>
+        </div>
+
+        <!-- Hasil Evaluasi -->
+        <div class="evaluation-result">
+            <h2>Hasil Evaluasi</h2>
+            <div class="result-cards">
+                <div class="result-card">
+                    <h3>Berat Ideal</h3>
+                    <div class="value-large">{{ hasil.berat_ideal }} kg</div>
+                </div>
+                <div class="result-card">
+                    <h3>BMI</h3>
+                    <div class="value-large">{{ hasil.nilai_bmi }}</div>
+                    <div class="bmi-category {{ hasil.kategori_bmi.lower() }}">{{ hasil.kategori_bmi }}</div>
+                </div>
+                <div class="result-card">
+                    <h3>Status</h3>
+                    <div class="status-indicator">
+                        {% if hasil.berat > hasil.berat_ideal + 2 %}
+                            <span class="status overweight">Kelebihan Berat</span>
+                        {% elif hasil.berat < hasil.berat_ideal - 2 %}
+                            <span class="status underweight">Kekurangan Berat</span>
+                        {% else %}
+                            <span class="status ideal">Ideal</span>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Saran -->
+        <div class="advice-section">
+            <h2>Saran Kesehatan</h2>
+            <div class="advice-content">
+                <p>{{ hasil.saran }}</p>
+            </div>
+        </div>
+
+        <!-- Tombol Aksi -->
+        <div class="action-buttons">
+            <a href="{{ url_for('index') }}" class="btn btn-primary">Cek Lagi</a>
+            <button onclick="window.print()" class="btn btn-secondary">Cetak Hasil</button>
+        </div>
+    </div>
+
+    <script>
+        // Data untuk grafik
+        const weightData = {
+            labels: ['Berat Saat Ini', 'Berat Ideal'],
+            datasets: [{
+                label: 'Berat Badan (kg)',
+                data: [{{ hasil.berat }}, {{ hasil.berat_ideal }}],
+                backgroundColor: [
+                    'rgba(255, 99, 132, 0.8)',
+                    'rgba(54, 162, 235, 0.8)'
+                ],
+                borderColor: [
+                    'rgba(255, 99, 132, 1)',
+                    'rgba(54, 162, 235, 1)'
+                ],
+                borderWidth: 2
+            }]
+        };
+
+        const bmiData = {
+            labels: ['BMI Anda'],
+            datasets: [{
+                label: 'Nilai BMI',
+                data: [{{ hasil.nilai_bmi }}],
+                backgroundColor: ['{{ hasil.bmi_color }}'],
+                borderColor: ['{{ hasil.bmi_border_color }}'],
+                borderWidth: 2
+            }]
+        };
+
+        // Konfigurasi grafik berat badan
+        const weightCtx = document.getElementById('weightChart').getContext('2d');
+        new Chart(weightCtx, {
+            type: 'bar',
+            data: weightData,
+            options: {
+                responsive: true,
+                plugins: {
+                    legend: {
+                        position: 'top',
+                    },
+                    title: {
+                        display: true,
+                        text: 'Perbandingan Berat Badan Saat Ini vs Ideal'
+                    }
+                },
+                scales: {
+                    y: {
+                        beginAtZero: true,
+                        title: {
+                            display: true,
+                            text: 'Berat (kg)'
+                        }
+                    }
+                }
+            }
+        });
+
+        // Konfigurasi grafik BMI
+        const bmiCtx = document.getElementById('bmiChart').getContext('2d');
+        new Chart(bmiCtx, {
+            type: 'doughnut',
+            data: bmiData,
+            options: {
+                responsive: true,
+                plugins: {
+                    legend: {
+                        position: 'top',
+                    },
+                    title: {
+                        display: true,
+                        text: 'Indeks Massa Tubuh (BMI)'
+                    }
+                }
+            }
+        });
+    </script>
+</body>
+</html> 
