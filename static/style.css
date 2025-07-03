@@ -14,7 +14,7 @@ body {
 }
 
 .header-content {
-    max-width: 600px;
+    max-width: 800px;
     margin: auto;
     padding: 0 2em;
     display: flex;
@@ -26,6 +26,7 @@ body {
     margin: 0;
     color: white;
     text-align: left;
+    font-size: 1.5em;
 }
 
 .user-info {
@@ -50,7 +51,7 @@ body {
 
 /* Alert Messages */
 .alert {
-    max-width: 600px;
+    max-width: 800px;
     margin: 1em auto;
     padding: 1em;
     border-radius: 6px;
@@ -197,4 +198,436 @@ input[type="submit"]:hover {
 .result p {
     margin: 10px 0;
     line-height: 1.6;
+}
+
+/* Result Page Styles */
+.result-container {
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 2em;
+}
+
+.personal-info {
+    background: white;
+    padding: 2em;
+    border-radius: 8px;
+    box-shadow: 0 0 10px rgba(0,0,0,0.1);
+    margin-bottom: 2em;
+}
+
+.personal-info h2 {
+    color: #2c3e50;
+    margin-top: 0;
+    margin-bottom: 1.5em;
+}
+
+.info-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 1em;
+}
+
+.info-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1em;
+    background: #f8f9fa;
+    border-radius: 6px;
+    border-left: 4px solid #3498db;
+}
+
+.info-item .label {
+    font-weight: bold;
+    color: #2c3e50;
+}
+
+.info-item .value {
+    color: #7f8c8d;
+    font-weight: 500;
+}
+
+.chart-container {
+    background: white;
+    padding: 2em;
+    border-radius: 8px;
+    box-shadow: 0 0 10px rgba(0,0,0,0.1);
+    margin-bottom: 2em;
+}
+
+.chart-container h2 {
+    color: #2c3e50;
+    margin-top: 0;
+    margin-bottom: 1.5em;
+    text-align: center;
+}
+
+.chart-wrapper {
+    position: relative;
+    height: 400px;
+    margin: 0 auto;
+    max-width: 600px;
+}
+
+.evaluation-result {
+    background: white;
+    padding: 2em;
+    border-radius: 8px;
+    box-shadow: 0 0 10px rgba(0,0,0,0.1);
+    margin-bottom: 2em;
+}
+
+.evaluation-result h2 {
+    color: #2c3e50;
+    margin-top: 0;
+    margin-bottom: 1.5em;
+    text-align: center;
+}
+
+.result-cards {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 1.5em;
+}
+
+.result-card {
+    text-align: center;
+    padding: 1.5em;
+    background: #f8f9fa;
+    border-radius: 8px;
+    border: 2px solid #e9ecef;
+}
+
+.result-card h3 {
+    color: #2c3e50;
+    margin-top: 0;
+    margin-bottom: 1em;
+    font-size: 1.1em;
+}
+
+.value-large {
+    font-size: 2em;
+    font-weight: bold;
+    color: #3498db;
+    margin-bottom: 0.5em;
+}
+
+.bmi-category {
+    padding: 0.5em 1em;
+    border-radius: 20px;
+    font-weight: bold;
+    font-size: 0.9em;
+    text-transform: uppercase;
+}
+
+.bmi-category.kurus {
+    background: #fff3cd;
+    color: #856404;
+}
+
+.bmi-category.normal {
+    background: #d4edda;
+    color: #155724;
+}
+
+.bmi-category.gemuk {
+    background: #f8d7da;
+    color: #721c24;
+}
+
+.bmi-category.obesitas {
+    background: #f8d7da;
+    color: #721c24;
+}
+
+.status-indicator {
+    margin-top: 1em;
+}
+
+.status {
+    padding: 0.5em 1em;
+    border-radius: 20px;
+    font-weight: bold;
+    font-size: 0.9em;
+}
+
+.status.ideal {
+    background: #d4edda;
+    color: #155724;
+}
+
+.status.overweight {
+    background: #f8d7da;
+    color: #721c24;
+}
+
+.status.underweight {
+    background: #fff3cd;
+    color: #856404;
+}
+
+.advice-section {
+    background: white;
+    padding: 2em;
+    border-radius: 8px;
+    box-shadow: 0 0 10px rgba(0,0,0,0.1);
+    margin-bottom: 2em;
+}
+
+.advice-section h2 {
+    color: #2c3e50;
+    margin-top: 0;
+    margin-bottom: 1em;
+}
+
+.advice-content {
+    background: #e8f4fd;
+    padding: 1.5em;
+    border-radius: 6px;
+    border-left: 4px solid #3498db;
+}
+
+.advice-content p {
+    margin: 0;
+    line-height: 1.6;
+    color: #2c3e50;
+    font-size: 1.1em;
+}
+
+.action-buttons {
+    display: flex;
+    justify-content: center;
+    gap: 1em;
+    margin-top: 2em;
+}
+
+.btn {
+    padding: 12px 24px;
+    border: none;
+    border-radius: 6px;
+    font-size: 16px;
+    font-weight: bold;
+    text-decoration: none;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.btn-primary {
+    background: #3498db;
+    color: white;
+}
+
+.btn-primary:hover {
+    background: #2980b9;
+}
+
+.btn-secondary {
+    background: #95a5a6;
+    color: white;
+}
+
+.btn-secondary:hover {
+    background: #7f8c8d;
+}
+
+/* Mobile Responsive Styles */
+@media screen and (max-width: 768px) {
+    /* Header Mobile */
+    .header-content {
+        flex-direction: column;
+        gap: 1em;
+        text-align: center;
+        padding: 0 1em;
+    }
+    
+    .header h1 {
+        font-size: 1.3em;
+        text-align: center;
+    }
+    
+    .user-info {
+        flex-direction: column;
+        gap: 0.5em;
+    }
+    
+    /* Login Mobile */
+    .login-container {
+        padding: 1em;
+    }
+    
+    .login-box {
+        padding: 2em 1.5em;
+        margin: 1em;
+    }
+    
+    .login-box h1 {
+        font-size: 1.5em;
+    }
+    
+    .login-box h3 {
+        font-size: 1em;
+    }
+    
+    /* Form Mobile */
+    .form-container {
+        margin: 1em;
+        padding: 1.5em;
+    }
+    
+    .result-container {
+        padding: 1em;
+    }
+    
+    .personal-info,
+    .chart-container,
+    .evaluation-result,
+    .advice-section {
+        padding: 1.5em;
+        margin-bottom: 1.5em;
+    }
+    
+    /* Info Grid Mobile */
+    .info-grid {
+        grid-template-columns: 1fr;
+        gap: 0.8em;
+    }
+    
+    .info-item {
+        flex-direction: column;
+        text-align: center;
+        gap: 0.5em;
+    }
+    
+    /* Result Cards Mobile */
+    .result-cards {
+        grid-template-columns: 1fr;
+        gap: 1em;
+    }
+    
+    .result-card {
+        padding: 1.2em;
+    }
+    
+    .value-large {
+        font-size: 1.8em;
+    }
+    
+    /* Chart Mobile */
+    .chart-wrapper {
+        height: 300px;
+    }
+    
+    /* Action Buttons Mobile */
+    .action-buttons {
+        flex-direction: column;
+        gap: 0.8em;
+    }
+    
+    .btn {
+        width: 100%;
+        padding: 15px;
+        font-size: 16px;
+    }
+    
+    /* Alert Mobile */
+    .alert {
+        margin: 1em;
+        font-size: 14px;
+    }
+}
+
+/* Small Mobile Devices */
+@media screen and (max-width: 480px) {
+    .header-content {
+        padding: 0 0.5em;
+    }
+    
+    .login-box {
+        padding: 1.5em 1em;
+        margin: 0.5em;
+    }
+    
+    .form-container {
+        margin: 0.5em;
+        padding: 1em;
+    }
+    
+    .result-container {
+        padding: 0.5em;
+    }
+    
+    .personal-info,
+    .chart-container,
+    .evaluation-result,
+    .advice-section {
+        padding: 1em;
+        margin-bottom: 1em;
+    }
+    
+    .chart-wrapper {
+        height: 250px;
+    }
+    
+    .value-large {
+        font-size: 1.6em;
+    }
+    
+    .bmi-category,
+    .status {
+        font-size: 0.8em;
+        padding: 0.4em 0.8em;
+    }
+    
+    .advice-content {
+        padding: 1em;
+    }
+    
+    .advice-content p {
+        font-size: 1em;
+    }
+}
+
+/* Landscape Mobile */
+@media screen and (max-width: 768px) and (orientation: landscape) {
+    .login-container {
+        min-height: auto;
+        padding: 1em;
+    }
+    
+    .chart-wrapper {
+        height: 200px;
+    }
+}
+
+/* Touch-friendly improvements */
+@media (hover: none) and (pointer: coarse) {
+    input, select, .btn {
+        min-height: 44px; /* Minimum touch target size */
+    }
+    
+    .logout-btn {
+        min-height: 36px;
+        padding: 10px 20px;
+    }
+    
+    .result-card {
+        min-height: 120px;
+    }
+}
+
+/* Print Styles */
+@media print {
+    .header, .action-buttons {
+        display: none;
+    }
+    
+    .result-container {
+        padding: 0;
+    }
+    
+    .chart-container, .personal-info, .evaluation-result, .advice-section {
+        box-shadow: none;
+        border: 1px solid #ddd;
+        margin-bottom: 1em;
+    }
 }
