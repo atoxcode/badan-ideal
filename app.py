@@ -1,16 +1,66 @@
 from flask import Flask, render_template, request, redirect, url_for, session, flash
 from functools import wraps
 import os
+import sqlite3
+import hashlib
+from datetime import datetime
 
 app = Flask(__name__)
 app.secret_key = os.urandom(24)  # Secret key untuk session
 
-# Database sederhana untuk user (dalam praktik nyata gunakan database yang proper)
-users = {
-    "admin": "password123",
-    "user1": "password123",
-    "user2": "password123"
-}
+# Database setup
+def init_db():
+    conn = sqlite3.connect('users.db')
+    cursor = conn.cursor()
+    cursor.execute('''
+        CREATE TABLE IF NOT EXISTS users (
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            username TEXT UNIQUE NOT NULL,
+            password TEXT NOT NULL,
+            email TEXT,
+            created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+        )
+    ''')
+    
+    # Insert default admin user if not exists
+    cursor.execute("SELECT * FROM users WHERE username = 'admin'")
+    if not cursor.fetchone():
+        hashed_password = hashlib.sha256('password123'.encode()).hexdigest()
+        cursor.execute("INSERT INTO users (username, password, email) VALUES (?, ?, ?)", 
+                      ('admin', hashed_password, 'admin@example.com'))
+    
+    conn.commit()
+    conn.close()
+
+def hash_password(password):
+    return hashlib.sha256(password.encode()).hexdigest()
+
+def verify_password(password, hashed):
+    return hash_password(password) == hashed
+
+def get_user_by_username(username):
+    conn = sqlite3.connect('users.db')
+    cursor = conn.cursor()
+    cursor.execute("SELECT * FROM users WHERE username = ?", (username,))
+    user = cursor.fetchone()
+    conn.close()
+    return user
+
+def create_user(username, password, email=None):
+    try:
+        conn = sqlite3.connect('users.db')
+        cursor = conn.cursor()
+        hashed_password = hash_password(password)
+        cursor.execute("INSERT INTO users (username, password, email) VALUES (?, ?, ?)", 
+                      (username, hashed_password, email))
+        conn.commit()
+        conn.close()
+        return True
+    except sqlite3.IntegrityError:
+        return False
+
+# Initialize database
+init_db()
 
 # Decorator untuk mengecek login
 def login_required(f):
@@ -51,14 +101,52 @@ def tentukan_kategori_bmi(berat, tinggi):
     else:
         return "Obesitas", bmi, "rgba(255, 99, 132, 0.8)", "rgba(255, 99, 132, 1)"
 
+@app.route("/register", methods=["GET", "POST"])
+def register():
+    if request.method == "POST":
+        username = request.form["username"]
+        password = request.form["password"]
+        confirm_password = request.form["confirm_password"]
+        email = request.form.get("email", "")
+        
+        # Validasi input
+        if not username or not password:
+            flash('Username dan password harus diisi!', 'error')
+            return render_template("register.html")
+        
+        if password != confirm_password:
+            flash('Password tidak cocok!', 'error')
+            return render_template("register.html")
+        
+        if len(password) < 6:
+            flash('Password minimal 6 karakter!', 'error')
+            return render_template("register.html")
+        
+        # Cek apakah username sudah ada
+        if get_user_by_username(username):
+            flash('Username sudah digunakan!', 'error')
+            return render_template("register.html")
+        
+        # Buat user baru
+        if create_user(username, password, email):
+            flash('Registrasi berhasil! Silakan login.', 'success')
+            return redirect(url_for('login'))
+        else:
+            flash('Terjadi kesalahan saat registrasi!', 'error')
+    
+    return render_template("register.html")
+
 @app.route("/login", methods=["GET", "POST"])
 def login():
     if request.method == "POST":
         username = request.form["username"]
         password = request.form["password"]
         
-        if username in users and users[username] == password:
+        user = get_user_by_username(username)
+        
+        if user and verify_password(password, user[2]):  # user[2] adalah password
             session['username'] = username
+            session['user_id'] = user[0]
             flash('Login berhasil! Selamat datang, ' + username, 'success')
             return redirect(url_for('index'))
         else:
@@ -69,6 +157,7 @@ def login():
 @app.route("/logout")
 def logout():
     session.pop('username', None)
+    session.pop('user_id', None)
     flash('Anda telah logout.', 'info')
     return redirect(url_for('login'))
 
