@@ -1,6 +1,6 @@
 # Aplikasi Berat Badan Ideal
 
-Aplikasi web sederhana untuk menghitung berat badan ideal berdasarkan usia, jenis kelamin, dan tinggi badan dengan sistem login personal, database SQLite, dan visualisasi grafik.
+Aplikasi web sederhana yang dibuat oleh generative ai kurang dari 10 menit untuk menghitung berat badan ideal berdasarkan usia, jenis kelamin, dan tinggi badan dengan sistem login personal, database SQLite, dan visualisasi grafik.
 
 ## Fitur
 
